@@ -8,7 +8,7 @@ import mlflow
 import mlflow.sklearn
 
 # Load data from csv
-data = pd.read_csv("data/processed/titanic.csv")
+data = pd.read_csv("data/processed/titanicp.csv")
 X = data.drop(columns=["Survived"])
 y = data["Survived"]
 
@@ -55,4 +55,3 @@ with mlflow.start_run():
     with open("metrics.json", "w") as f:
         json.dump(metrics, f)
 
-print(f"Test Accuracy: {accuracy}")
