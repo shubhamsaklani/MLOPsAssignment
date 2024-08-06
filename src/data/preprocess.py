@@ -22,7 +22,7 @@ def preprocess():
              "Survived"]]
 
     # Save the processed dataframe
-    df.to_csv("data/processed/titanic.csv", index=False)
+    df.to_csv("data/processed/titanicp.csv", index=False)
 
 
 if __name__ == "__main__":

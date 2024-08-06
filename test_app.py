@@ -3,6 +3,7 @@ from flask.testing import FlaskClient
 import json
 import sys
 import os
+from flask import render_template
 from app import app
 
 # Add the src directory to the Python path
@@ -20,7 +21,12 @@ def test_home(client: FlaskClient):
     """Test the home route"""
     response = client.get("/")
     assert response.status_code == 200
-    assert b"Welcome to the Titanic Survival Prediction API!" in response.data
+    # Decode response.data from bytes to a string
+    response_data = response.data.decode('utf-8')
+    # Render the template
+    rendered_template = render_template("form.html")
+    # Compare the decoded response data with the rendered template
+    assert rendered_template in response_data
 
 
 def test_predict(client: FlaskClient):
