@@ -84,4 +84,43 @@ jobs:
         run: |
           pip install pytest flask-testing
           pytest
-  
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Debug Secrets
+        run: |
+          echo "DOCKER_USERNAME length: ${#DOCKER_USERNAME}"
+          echo "DOCKER_PASSWORD length: ${#DOCKER_PASSWORD}"
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Log in to Docker Hub
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t mlops59 .
+
+      - name: Tag Docker image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: docker tag mlops59:latest ${DOCKER_USERNAME}/mlops59:latest
+
+      - name: Push Docker image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        run: docker push ${DOCKER_USERNAME}/mlops59:latest
+
+      
+        
+        
+        
+        
